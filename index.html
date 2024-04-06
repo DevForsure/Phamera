@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact List</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 20px auto;
+      }
+
+      .contact {
+        border-bottom: 1px solid #ccc;
+        padding: 10px 0;
+      }
+
+      .contact img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-right: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="contacts"></div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("http://192.168.29.211:5000/contacts")
+          .then((response) => response.json())
+          .then((data) => {
+            const contactsDiv = document.getElementById("contacts");
+            data.contacts.forEach((contact) => {
+              const contactDiv = document.createElement("div");
+              contactDiv.classList.add("contact");
+              contactDiv.innerHTML = `
+          <img src="data:image/png;base64,${contact.png_data}" alt="${contact.name}">
+          <div>
+            <h2>${contact.name}</h2>
+            <p>Contact Number: ${contact.contact_number}</p>
+          </div>
+        `;
+              contactsDiv.appendChild(contactDiv);
+            });
+          })
+          .catch((error) => console.error("Error fetching contacts:", error));
+      });
+    </script>
+  </body>
+</html>
